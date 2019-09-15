@@ -10,6 +10,10 @@ const Recipe = mongoose.model('Recipe', {
   created: {
     type: Number,
     required: true
+  },
+  _creator: {
+    required: true,
+    type: mongoose.Schema.Types.ObjectId
   }
 });
 
