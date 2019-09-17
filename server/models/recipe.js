@@ -7,9 +7,21 @@ const Recipe = mongoose.model('Recipe', {
     trim: true,
     maxlength: 30
   },
+  description: {
+    type: String,
+    default: ''
+  },
+  recipes: {
+    type: String,
+    default: ''
+  },
   created: {
     type: Number,
     required: true
+  },
+  creatorName: {
+    required: true,
+    type: String
   },
   _creator: {
     required: true,

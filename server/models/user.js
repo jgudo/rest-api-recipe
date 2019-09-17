@@ -16,10 +16,20 @@ const UserSchema = new mongoose.Schema({
       message: '{VALUE} is invalid.'
     }
   },
+  fullname: {
+    type: String,
+    maxlength: 40,
+    minlength: 4,
+    required: true
+  },
   password: {
     type: String,
     required: true,
     minlength: 8
+  },
+  dateJoined: {
+    type: Number,
+    required: true
   },
   tokens: [{
     access: {
@@ -70,6 +80,14 @@ UserSchema.statics.findCredential = function(email, password) {
     })
     .catch(e => console.log(e));
 }
+
+UserSchema.methods.removeToken = function(token) {
+  return this.updateOne({
+    $pull: {
+      tokens: { token }
+    }
+  });
+};
 
 UserSchema.pre('save', function(next) {
   if (this.isModified('password')) {

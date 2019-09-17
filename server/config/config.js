@@ -11,7 +11,7 @@ if (env === 'dev') {
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_DB_URI, {
   useNewUrlParser:true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true
 });
-
-module.exports = { mongoose };
