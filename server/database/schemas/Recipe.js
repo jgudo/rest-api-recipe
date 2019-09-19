@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Recipe = mongoose.model('Recipe', {
+const RecipeSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -29,4 +29,4 @@ const Recipe = mongoose.model('Recipe', {
   }
 });
 
-module.exports = { Recipe };
+module.exports = RecipeSchema;

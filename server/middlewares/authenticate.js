@@ -1,10 +1,8 @@
-const { User } = require('../models/user');
-
 const authenticate = async (req, res, next) => {
   const token = req.header('x-auth');
-
+  
   try {
-    const user = await User.findToken(token);
+    const user = await req.db.User.findToken(token);
 
     if (!user) return Promise.reject();
 

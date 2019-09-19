@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/server.js"
+    "start": "nodemon --exec babel-node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,12 +12,22 @@
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "express-winston": "^3.3.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.2",
     "mongoose": "^5.7.0",
-    "socket.io": "^2.2.0"
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "socket.io": "^2.2.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/node": "^7.6.1",
+    "@babel/preset-env": "^7.6.0",
     "cors": "^2.8.5",
     "cross-env": "^5.2.1",
     "dotenv": "^8.1.0"

@@ -46,7 +46,13 @@ const UserSchema = new mongoose.Schema({
 // preverve 'this' with regular functions
 UserSchema.methods.generateAuthToken = function() {
   const access = 'auth';
-  const token = jwt.sign({ _id: this._id.toHexString(), access }, process.env.JWT_SECRET).toString();
+
+  const token = jwt.sign({ 
+    _id: this._id.toHexString(), 
+    access
+  }, process.env.JWT_SECRET, {
+    expiresIn: 86400
+  }).toString();
 
   this.tokens.push({ token, access });
   return this.save().then(() => token);
@@ -102,6 +108,6 @@ UserSchema.pre('save', function(next) {
   }
 });
 
-const User = mongoose.model('User', UserSchema);
+// const User = mongoose.model('User', UserSchema);
 
-module.exports = { User };
+module.exports = UserSchema;
