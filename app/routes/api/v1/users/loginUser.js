@@ -7,8 +7,11 @@ module.exports = Router({ mergeParams: true })
       const token = await user.generateAuthToken();
 
       res.header('x-auth', token).send({ 
-        fullname: user.fullname, 
-        email: user.email,
+        user: {
+          id: user._id,
+          fullname: user.fullname, 
+          email: user.email,
+        },
         token 
       });
     } catch (e) {

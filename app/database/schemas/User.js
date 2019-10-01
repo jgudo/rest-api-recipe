@@ -16,6 +16,12 @@ const UserSchema = new mongoose.Schema({
       message: '{VALUE} is invalid.'
     }
   },
+  username: {
+    type: String,
+    minlength: 8,
+    required: true,
+    unique: true
+  },
   fullname: {
     type: String,
     maxlength: 40,
@@ -41,7 +47,7 @@ const UserSchema = new mongoose.Schema({
       required: true
     }
   }]
-});
+}, { timestamps: true });
 
 // preverve 'this' with regular functions
 UserSchema.methods.generateAuthToken = function() {
@@ -61,7 +67,7 @@ UserSchema.methods.generateAuthToken = function() {
 UserSchema.statics.findToken = function(token) {
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
-
+    
     return this.findOne({
       _id: user._id,
       'tokens.token': token,
@@ -69,6 +75,14 @@ UserSchema.statics.findToken = function(token) {
     });
   } catch (e) {
     return Promise.reject();
+  }
+}
+
+UserSchema.methods.toProfileJSON = function(user) {
+  return {
+    id: this._id,
+    fullname: this.fullname,
+    email: this.email
   }
 }
 
@@ -94,6 +108,18 @@ UserSchema.methods.removeToken = function(token) {
     }
   });
 };
+
+UserSchema.methods.toAuthJSON = function(token) {
+	return {
+		user: {
+			fullname: this.fullname,
+			email: this.email,
+      id: this._id,
+      username: this.username
+		},
+		token
+	};
+}
 
 UserSchema.pre('save', function(next) {
   if (this.isModified('password')) {

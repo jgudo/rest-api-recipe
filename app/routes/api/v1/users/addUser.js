@@ -12,12 +12,7 @@ module.exports = Router({ mergeParams: true })
     try {
       await user.save();
       const token = await user.generateAuthToken();
-      res.header('x-auth', token).send({ 
-        fullname: user.fullname, 
-        email: user.email,
-        token 
-      });
-      // res.status(200).send('User successfully saved');
+      return res.header('x-auth', token).send(user.toAuthJSON(token));
     } catch (e) {
       switch (e.code) {
         case 11000:

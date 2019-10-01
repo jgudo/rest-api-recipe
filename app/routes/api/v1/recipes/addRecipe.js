@@ -16,7 +16,6 @@ module.exports = Router({ mergeParams: true })
       const { _id, name, description, recipes, created, creatorName} = doc;
       res.status(200).send({ _id, name, description, recipes, created, creatorName });
     } catch (e) {
-      res.status(400).json(e);
       next(e);
     }
   });

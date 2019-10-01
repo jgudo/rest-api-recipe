@@ -11,10 +11,11 @@ const RecipeSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  recipes: {
-    type: String,
-    default: ''
-  },
+  recipes: [String],
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment'
+  }],
   created: {
     type: Number,
     required: true
@@ -25,7 +26,8 @@ const RecipeSchema = new mongoose.Schema({
   },
   _creator: {
     required: true,
-    type: mongoose.Schema.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 

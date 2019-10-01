@@ -1,7 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const sanitize = require('mongo-sanitize');
 const expressWinston = require('express-winston');
+const aqp = require('api-query-params');
 const router = require('./routes/createRouter')();
 
 module.exports = ({ database, logger }) => express()
@@ -16,6 +18,9 @@ module.exports = ({ database, logger }) => express()
   .use((req, res, next) => {
     req.base = `${req.protocol}://${req.get('host')}`;
     req.logger = logger;
+    req.body = sanitize(req.body),
+    req.query = aqp(sanitize(req.query)),
+    req.params = sanitize(req.params),
     req.db = database;
     return next();
   })
