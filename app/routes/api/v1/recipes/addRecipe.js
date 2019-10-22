@@ -9,12 +9,11 @@ module.exports = Router({ mergeParams: true })
         description: req.body.description,
         recipes: req.body.recipes,
         created: new Date().getTime(),
-        creatorName: req.user.fullname,
-        _creator: req.user._id
+        creator: req.user._id
       });  
       const doc = await recipe.save();
-      const { _id, name, description, recipes, created, creatorName} = doc;
-      res.status(200).send({ _id, name, description, recipes, created, creatorName });
+
+      res.status(200).send(doc.toJSONfor(req.db.User, req.user));
     } catch (e) {
       next(e);
     }

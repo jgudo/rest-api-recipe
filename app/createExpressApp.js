@@ -27,5 +27,6 @@ module.exports = ({ database, logger }) => express()
   // .use(express.static('./public'))
   .use('/api', router)
   .use((error, req, res, next) => {
+    console.log(error);
     res.status(error.status || 500).json({ error })
   });

@@ -78,11 +78,12 @@ UserSchema.statics.findToken = function(token) {
   }
 }
 
-UserSchema.methods.toProfileJSON = function(user) {
+UserSchema.statics.toProfileJSON = function(user) {
   return {
-    id: this._id,
-    fullname: this.fullname,
-    email: this.email
+    _id: user._id,
+    username: user.username,
+    fullname: user.fullname,
+    email: user.email
   }
 }
 
@@ -100,6 +101,7 @@ UserSchema.statics.findCredential = function(email, password) {
     })
     .catch(e => console.log(e));
 }
+
 
 UserSchema.methods.removeToken = function(token) {
   return this.updateOne({

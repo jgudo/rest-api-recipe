@@ -23,7 +23,7 @@ module.exports = Router({ mergeParams: true })
           }
         });
       
-      res.status(200).send(comment.toJSONfor(req.profile));
+      res.status(200).send(comment.toJSONfor(req.db.User, req.user));
     } catch (e) {
       next(e);
     }

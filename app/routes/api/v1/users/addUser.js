@@ -4,6 +4,7 @@ module.exports = Router({ mergeParams: true })
   .post('/v1/user', async (req, res, next) => {
     const user = new req.db.User({
       fullname: req.body.fullname,
+      username: req.body.username,
       email: req.body.email,
       dateJoined: new Date().getTime(),
       password: req.body.password

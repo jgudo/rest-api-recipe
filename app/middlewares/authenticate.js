@@ -8,12 +8,6 @@ const authenticate = async (req, res, next) => {
 
     req.user = user;
     req.token = token;
-    req.profile = {
-      fullname: user.fullname,
-      email: user.email,
-      id: user._id,
-      username: user.username
-    };
     next();
   } catch (e) {
     res.status(401).json(e);

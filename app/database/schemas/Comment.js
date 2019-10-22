@@ -19,12 +19,12 @@ const CommentSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-CommentSchema.methods.toJSONfor = function(profile) {
+CommentSchema.methods.toJSONfor = function(User, user) {
   return {
     id: this._id,
     body: this.body,
     createdAt: this.createdAt,
-    commentor: profile
+    commentor: User.toProfileJSON(user)
   };
 };
 
