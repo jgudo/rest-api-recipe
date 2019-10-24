@@ -12,8 +12,9 @@ module.exports = Router({ mergeParams: true })
         creator: req.user._id
       });  
       const doc = await recipe.save();
+      const populatedDoc = await doc.toJSONrecipe(req.user);
 
-      res.status(200).send(doc.toJSONfor(req.db.User, req.user));
+      res.status(200).send(populatedDoc);
     } catch (e) {
       next(e);
     }

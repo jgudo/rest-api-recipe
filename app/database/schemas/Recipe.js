@@ -33,6 +33,14 @@ const RecipeSchema = new mongoose.Schema({
     default: false,
     required: true
   },
+  favorited: {
+    type: Boolean,
+    default: false
+  },
+  favoritesCount: {
+    type: Number,
+    default: 0
+  },
   created: {
     type: Number,
     required: true
@@ -64,24 +72,45 @@ RecipeSchema.methods.updateLikesCount = function() {
   })
 }
 
+RecipeSchema.methods.updateFavoriteCount = function(user) {
+  return user.countDocuments({
+    favorites: {
+      $in: [this._id]
+    }
+  }).then((count) => {
+    console.log(count);
+    this.favoritesCount = count;
+    return this.save();
+  });
+};
+
 RecipeSchema.methods.isLiked = function(id) {
-  return this.likers.some(likerId => id.toString() === likerId.toString());
+  return this.likers.some((likerId) => {
+    if (typeof likerId === 'string') {
+      return id.toString() === likerId.toString() ? true : false;
+    } else {
+      return id.toString() === likerId._id.toString() ? true : false;
+    }
+  });
 }
 
-RecipeSchema.methods.toJSONfor = function(User, user) {
-  return {
-    _id: this._id,
-    name: this.name,
-    description: this.description,
-    recipes: this.recipes,
-    comments: [],
-    likers: [],
-    likes: this.likers.length,
-    commentsCount: this.comments.length,
-    liked: this.isLiked(user._id) ? true : false,
-    created: this.created,
-    creator: User.toProfileJSON(user) 
-  };
+RecipeSchema.methods.toJSONrecipe = async function(user) {
+  this.liked = this.isLiked(user._id);
+  this.favorited = user.isFavorite(this._id);
+
+  return await this.populate([{
+    path: 'creator',
+    select: 'fullname username email'
+  }, {
+    path: 'likers',
+    select: 'fullname username email'
+  }, {
+    path: 'comments',
+    populate: { 
+      path: 'commentor',
+      select: 'fullname username email'
+    }
+  }]).execPopulate();
 }
 
 module.exports = RecipeSchema;

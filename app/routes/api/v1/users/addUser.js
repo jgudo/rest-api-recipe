@@ -15,20 +15,11 @@ module.exports = Router({ mergeParams: true })
       const token = await user.generateAuthToken();
       return res.header('x-auth', token).send(user.toAuthJSON(token));
     } catch (e) {
-      switch (e.code) {
-        case 11000:
-          res.status(400).send({
-            status: 400,
-            message: 'Email already exists, try another one.'
-          });
-          break;
-        default: 
-          res.status(400).send({
-            status: 400,
-            message: e.errmsg ? e.errmsg : e.message
-          });
-          break;
-      }
+      res.status(400).send({
+        status: 400,
+        message: e.errmsg ? e.errmsg : e.message
+      });
+      // TODO handle errors
       next(e);
     }
   });

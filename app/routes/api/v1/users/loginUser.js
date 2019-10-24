@@ -6,9 +6,10 @@ module.exports = Router({ mergeParams: true })
       const user = await req.db.User.findCredential(req.body.email, req.body.password);
       const token = await user.generateAuthToken();
 
+
       res.header('x-auth', token).send({ 
         user: {
-          id: user._id,
+          _id: user._id,
           fullname: user.fullname, 
           email: user.email,
         },

@@ -37,6 +37,10 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  favorites: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe'
+  }],
   tokens: [{
     access: {
       type: String,
@@ -94,12 +98,19 @@ UserSchema.statics.findCredential = function(email, password) {
 
       return new Promise((resolve, reject) => {
         bcrypt.compare(password, user.password, (err, match) => {
-          if (match) resolve(user);
-          else reject();
+          if (match) {
+            resolve(user);
+          }
+          else {
+            reject(err);
+          }
         })
       });
     })
-    .catch(e => console.log(e));
+    .catch((e) => {
+      console.log(e, 'ERROR TANGA');
+      return Promise.reject();
+    });
 }
 
 
@@ -122,6 +133,21 @@ UserSchema.methods.toAuthJSON = function(token) {
 		token
 	};
 }
+
+UserSchema.methods.favorite = function(id){
+  if(this.favorites.indexOf(id) === -1){
+      this.favorites.push(id);
+  } else {
+    this.favorites.pull(id);
+  }
+  return this.save();
+};
+
+UserSchema.methods.isFavorite = function(id){
+  return this.favorites.some(function(favoriteId){
+      return id.toString() === favoriteId.toString() ? true : false;
+  });
+};
 
 UserSchema.pre('save', function(next) {
   if (this.isModified('password')) {
